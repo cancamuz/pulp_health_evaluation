@@ -1,7 +1,8 @@
-const CACHE_NAME = "pulp-form-cache-v1";
+const CACHE_NAME = "pulp-form-cache-v2"; // bump version to force update
 const FILES_TO_CACHE = [
   "/",
-  "/try.html",
+  "/try.html",          // English form
+  "/form_german.html",  // German form
   "/manifest.json"
 ];
 
@@ -9,6 +10,17 @@ const FILES_TO_CACHE = [
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(FILES_TO_CACHE))
+  );
+});
+
+// Activate: clean old caches
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(
+        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
+      )
+    )
   );
 });
 

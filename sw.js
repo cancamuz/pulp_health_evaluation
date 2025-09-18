@@ -1,12 +1,11 @@
-const CACHE_NAME = "pulp-form-cache-v2";
+const CACHE_NAME = "pulp-form-cache";
 const FILES_TO_CACHE = [
   "/",
-  "/try.html",            // English form
-  "/form_german.html",    // German form
-  "/manifest.json"
+  "/try.html",      // English form
+  "/manifest.json"  // English manifest
 ];
 
-// Install: cache app shell
+// Install: cache app shell for English form
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(FILES_TO_CACHE))
@@ -24,10 +23,9 @@ self.addEventListener("activate", (event) => {
   );
 });
 
-// Fetch: serve from cache when offline
+// Fetch: serve English files from cache when offline
 self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => response || fetch(event.request))
   );
 });
-

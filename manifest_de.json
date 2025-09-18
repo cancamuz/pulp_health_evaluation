@@ -1,0 +1,9 @@
+{
+  "name": "Pulp Health Evaluation (DE)",
+  "short_name": "Pulp Form DE",
+  "start_url": "form_german.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2e7d32",
+  "icons": []
+}

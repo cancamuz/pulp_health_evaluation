@@ -172,6 +172,12 @@
   <script>
   // Load previous records from localStorage at startup
   let records = JSON.parse(localStorage.getItem("pulpitisRecords") || "[]");
+	  
+  function csvSafe(value) {
+  if (value === null || value === undefined) return '""';
+  // Escape double quotes by doubling them
+  return `"${String(value).replace(/"/g, '""')}"`;
+}
 
   function saveData() {
     // collect painType checkboxes
@@ -188,7 +194,7 @@
   	  smoking: document.querySelector('input[name="smoking"]:checked')?.value || "",
       antibiotics: document.querySelector('input[name="antibiotics"]:checked')?.value || "",
       painkillers: document.querySelector('input[name="painkillers"]:checked')?.value || "",
-	    painkillerType: document.querySelector('input[name="painkillerType"]')?.value || "",
+	  painkillerType: document.querySelector('input[name="painkillerType"]')?.value || "",
       painType: painTypeValues,
       painDurationPain: document.querySelector('input[name="painDurationPain"]')?.value || "",
       painIntensityVAS: document.getElementById('painIntensity').value,
@@ -225,9 +231,32 @@
     let csv = "PatientID,YearOfBirth,Sex,Smoking,Antibiotics,Painkillers,PainkillerType,PainType,PainDuration,PainVAS,ColdReaction,ColdVAS,ColdDuration,PercussionLateral,LatPercVAS,PercussionVertical,VertPercVAS,Palpation,PalpVAS,PulpExposure,Impression,Timestamp\r\n";
   
     // Add rows
-	records.forEach(r => {
-	  csv += `${r.patientID},${r.yearOfBirth},${r.sex},${r.smoking},${r.antibiotics},${r.painkillers},${r.painkillerType},${r.painType},${r.painDurationPain},${r.painIntensityVAS},${r.coldReaction},${r.coldIntensity},${r.coldDuration},${r.percussionLateral},${r.latPercIntensity},${r.percussionVertical},${r.vertPercIntensity},${r.palpation},${r.palpationIntensity},${r.pulpExposure},${r.impression},${r.timestamp}\r\n`;
-	});
+records.forEach(r => {
+  csv += [
+    r.patientID,
+    r.yearOfBirth,
+    r.sex,
+    r.smoking,
+    r.antibiotics,
+    r.painkillers,
+    r.painkillerType,
+    r.painType,
+    r.painDurationPain,
+    r.painIntensityVAS,
+    r.coldReaction,
+    r.coldIntensity,
+    r.coldDuration,
+    r.percussionLateral,
+    r.latPercIntensity,
+    r.percussionVertical,
+    r.vertPercIntensity,
+    r.palpation,
+    r.palpationIntensity,
+    r.pulpExposure,
+    r.impression,
+    r.timestamp
+  ].map(csvSafe).join(",") + "\r\n";
+});
 	  
     // Add BOM to force Excel/Numbers to interpret UTF-8 correctly
     const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);

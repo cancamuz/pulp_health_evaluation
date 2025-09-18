@@ -84,7 +84,7 @@
         <label><input type="checkbox" name="painType" value="Radiating">Radiating</label>
         <label><input type="checkbox" name="painType" value="Acute">Acute</label>
         <label><input type="checkbox" name="painType" value="Chronic">Chronic</label>
-	<input type="text" name="painkillerType" placeholder="For how long have you had pain?">
+	<input type="text" name="painDurationPain" placeholder="For how long have you had pain?">
       </div>
       <label class="pain-intensity-label">Pain Intensity (0 = no pain, 10 = worst pain)</label>
       <div class="slider-container">
@@ -193,9 +193,12 @@
       patientID: document.getElementById('patientID').value,
       yearOfBirth: document.getElementById('yearOfBirth').value,
       sex: document.querySelector('input[name="sex"]:checked')?.value || "",
+	  smoking: document.querySelector('input[name="smoking"]:checked')?.value || "",
       antibiotics: document.querySelector('input[name="antibiotics"]:checked')?.value || "",
       painkillers: document.querySelector('input[name="painkillers"]:checked')?.value || "",
+	  painkillerType: document.querySelector('input[name="painkillerType"]')?.value || "",
       painType: painTypeValues,
+      painDurationPain: document.querySelector('input[name="painDurationPain"]')?.value || "",
       painIntensityVAS: document.getElementById('painIntensity').value,
       coldReaction: document.querySelector('input[name="coldReaction"]:checked')?.value || "",
       coldIntensity: document.getElementById('coldIntensity').value,
@@ -227,13 +230,13 @@
     const records = JSON.parse(localStorage.getItem("pulpitisRecords") || "[]");
 
     // Build CSV header
-    let csv = "PatientID,YearOfBirth,Sex,Antibiotics,Painkillers,PainType,PainVAS,ColdReaction,ColdVAS,ColdDuration,PercussionLateral,LatPercVAS,PercussionVertical,VertPercVAS,Palpation,PalpVAS,PulpExposure,Impression,Timestamp\r\n";
+    let csv = "PatientID,YearOfBirth,Sex,Smoking,Antibiotics,Painkillers,PainkillerType,PainType,PainDuration,PainVAS,ColdReaction,ColdVAS,ColdDuration,PercussionLateral,LatPercVAS,PercussionVertical,VertPercVAS,Palpation,PalpVAS,PulpExposure,Impression,Timestamp\r\n";
   
     // Add rows
-    records.forEach(r => {
-      csv += `${r.patientID},${r.yearOfBirth},${r.sex},${r.antibiotics},${r.painkillers},${r.painType},${r.painIntensityVAS},${r.coldReaction},${r.coldIntensity},${r.coldDuration},${r.percussionLateral},${r.latPercIntensity},${r.percussionVertical},${r.vertPercIntensity},${r.palpation},${r.palpationIntensity},${r.pulpExposure},${r.impression},${r.timestamp}\r\n`;
-    });
-
+	records.forEach(r => {
+	  csv += `${r.patientID},${r.yearOfBirth},${r.sex},${r.smoking},${r.antibiotics},${r.painkillers},${r.painkillerType},${r.painType},${r.painDurationPain},${r.painIntensityVAS},${r.coldReaction},${r.coldIntensity},${r.coldDuration},${r.percussionLateral},${r.latPercIntensity},${r.percussionVertical},${r.vertPercIntensity},${r.palpation},${r.palpationIntensity},${r.pulpExposure},${r.impression},${r.timestamp}\r\n`;
+	});
+	  
     // Add BOM to force Excel/Numbers to interpret UTF-8 correctly
     const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
     const blob = new Blob([bom, csv], { type: "text/csv;charset=utf-8;" });
@@ -264,4 +267,5 @@
    </script>
 </body>
 </html>
+
 

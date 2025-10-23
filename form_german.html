@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Formular zur Beurteilung der Pulpa-Gesundheit</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; max-width: 900px; }
+    h2 { margin-top: 30px; }
+    label { margin-top: 5px; }
+    input[type="checkbox"], input[type="radio"] { margin-right: 5px; }
+    input[type="text"] { width: 100%; padding: 5px; margin-top: 5px; }
+    .section { border: 1px solid #ccc; border-radius: 8px; padding: 15px; margin-bottom: 20px; }
+    button { margin-top: 20px; padding: 10px 20px; }
+    .slider-container { display: flex; align-items: center; gap: 10px; }
+    .slider { flex: 1; -webkit-appearance: none; height: 15px; border-radius: 7px; background: linear-gradient(to right, green, yellow, red); outline: none; }
+    .slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #333; cursor: pointer; }
+    .slider::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: #333; cursor: pointer; }
+    .inline-group { margin-top: 10px; }
+    .inline-group span { margin-right: 10px; font-weight: bold; }
+    .inline-group label { margin-right: 15px; display: inline-block; }
+    .pain-type-group { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 10px; }
+    .pain-type-group label { display: flex; align-items: center; }
+    .pain-intensity-label { display: block; margin-top: 15px; font-weight: bold; }
+  </style>
+  <link rel="manifest" href="manifest_de.json">
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw_DE.js");
+    }
+  </script>
+</head>
+<body>
+  <h1>Formular zur Beurteilung der Pulpa-Gesundheit</h1>
+
+  <form id="pulpForm">
+    <div class="section">
+      <h2>Patienteninformationen</h2>
+      <label>Patienten-ID <input type="text" id="patientID" required></label>
+      <label>Geburtsjahr <input type="text" id="yearOfBirth" placeholder="z. B. 1985" required></label>
+
+      <div class="inline-group">
+        <span>Geschlecht:</span>
+        <label><input type="radio" name="sex" value="Male" required>Männlich</label>
+        <label><input type="radio" name="sex" value="Female">Weiblich</label>
+      </div>
+
+      <div class="inline-group">
+        <span>Rauchen:</span>
+        <label><input type="radio" name="smoking" value="Yes" required>Ja</label>
+        <label><input type="radio" name="smoking" value="No">Nein</label>
+      </div>
+
+      <div class="inline-group">
+        <span>Antibiotika (letzte 24h):</span>
+        <label><input type="radio" name="antibiotics" value="Yes" required>Ja</label>
+        <label><input type="radio" name="antibiotics" value="No">Nein</label>
+      </div>
+
+      <div class="inline-group">
+        <span>Schmerzmittel (letzte 24h):</span>
+        <label><input type="radio" name="painkillers" value="Yes" required>Ja</label>
+        <label><input type="radio" name="painkillers" value="No">Nein</label>
+        <input type="text" name="painkillerType" placeholder="Wenn ja, welches?">
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Schmerzart (vom Patienten berichtet)</h2>
+      <div class="pain-type-group">
+        <label><input type="checkbox" name="painType" value="No pain">Kein Schmerz</label>
+        <label><input type="checkbox" name="painType" value="Provoked">Ausgelöst (Stimulus, Hitze, süß…)</label>
+        <label><input type="checkbox" name="painType" value="Spontaneous">Spontan</label>
+        <label><input type="checkbox" name="painType" value="Sharp">Stechend</label>
+        <label><input type="checkbox" name="painType" value="Dull">Dumpf</label>
+        <label><input type="checkbox" name="painType" value="Throbbing">Pochen</label>
+        <label><input type="checkbox" name="painType" value="Radiating">Ausstrahlend</label>
+        <label><input type="checkbox" name="painType" value="Acute">Akut</label>
+        <label><input type="checkbox" name="painType" value="Chronic">Chronisch</label>
+        <input type="text" name="painDurationPain" placeholder="Wie lange bestehen die Schmerzen?">
+      </div>
+      <label class="pain-intensity-label">Schmerzintensität (0 = kein Schmerz, 10 = stärkster Schmerz)</label>
+      <div class="slider-container">
+        <input type="range" id="painIntensity" class="slider" min="0" max="10" step="1" value="0" oninput="document.getElementById('painVal').textContent=this.value">
+        <span id="painVal">0</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Kältetest (CO2)</h2>
+      <div class="inline-group">
+        <span>Reaktion:</span>
+        <label><input type="radio" name="coldReaction" value="No sensitivity / no reaction" required>Keine Empfindlichkeit / keine Reaktion</label>
+        <label><input type="radio" name="coldReaction" value="Sensitivity present / positive reaction">Empfindlichkeit vorhanden / positive Reaktion</label>
+      </div>
+      <label class="pain-intensity-label">Schmerzintensität (0 = kein Schmerz, 10 = stärkster Schmerz)</label>
+      <div class="slider-container">
+        <input type="range" id="coldIntensity" class="slider" min="0" max="10" step="1" value="0" oninput="document.getElementById('coldVal').textContent=this.value">
+        <span id="coldVal">0</span>
+      </div>
+      <div class="inline-group">
+        <span>Schmerzdauer:</span>
+        <label><input type="radio" name="coldDuration" value="0 - 3 seconds" required>0–3s</label>
+        <label><input type="radio" name="coldDuration" value="4 - 8 seconds">4–8s</label>
+        <label><input type="radio" name="coldDuration" value="9 - 15 seconds">9–15s</label>
+        <label><input type="radio" name="coldDuration" value="16 - 30 seconds">16–30s</label>
+        <label><input type="radio" name="coldDuration" value="> 30 seconds">>30s</label>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Perkussion / Palpation</h2>
+      <div class="inline-group">
+        <span>Lateral:</span>
+        <label><input type="radio" name="percussionLateral" value="No tenderness / no reaction" required>Keine Empfindlichkeit / keine Reaktion</label>
+        <label><input type="radio" name="percussionLateral" value="Tenderness present / positive reaction">Empfindlichkeit / positive Reaktion</label>
+      </div>
+      <label class="pain-intensity-label">Schmerzintensität</label>
+      <div class="slider-container">
+        <input type="range" id="latPercIntensity" class="slider" min="0" max="10" step="1" value="0" oninput="document.getElementById('latPercVal').textContent=this.value">
+        <span id="latPercVal">0</span>
+      </div>
+
+      <div class="inline-group">
+        <span>Vertikal:</span>
+        <label><input type="radio" name="percussionVertical" value="No tenderness / no reaction" required>Keine Empfindlichkeit / keine Reaktion</label>
+        <label><input type="radio" name="percussionVertical" value="Tenderness present / positive reaction">Empfindlichkeit / positive Reaktion</label>
+      </div>
+      <label class="pain-intensity-label">Schmerzintensität</label>
+      <div class="slider-container">
+        <input type="range" id="vertPercIntensity" class="slider" min="0" max="10" step="1" value="0" oninput="document.getElementById('vertPercVal').textContent=this.value">
+        <span id="vertPercVal">0</span>
+      </div>
+
+      <div class="inline-group">
+        <span>Palpation:</span>
+        <label><input type="radio" name="palpation" value="No tenderness / no reaction" required>Keine Empfindlichkeit / keine Reaktion</label>
+        <label><input type="radio" name="palpation" value="Tenderness present / positive reaction">Empfindlichkeit / positive Reaktion</label>
+      </div>
+      <label class="pain-intensity-label">Schmerzintensität</label>
+      <div class="slider-container">
+        <input type="range" id="palpationIntensity" class="slider" min="0" max="10" step="1" value="0" oninput="document.getElementById('palpVal').textContent=this.value">
+        <span id="palpVal">0</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Pulpaexposition (durch Präparation)</h2>
+      <div class="inline-group">
+        <span>Pulpa exponiert:</span>
+        <label><input type="radio" name="pulpExposure" value="No" required>Nein</label>
+        <label><input type="radio" name="pulpExposure" value="Yes">Ja</label>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Erstbeurteilung (Alle zutreffenden)</h2>
+      <div class="inline-group">
+        <span>Impression:</span>
+        <label><input type="checkbox" name="impression" value="Normal pulp" required>Normale Pulpa</label>
+        <label><input type="checkbox" name="impression" value="Reversible pulpitis">Reversible Pulpitis</label>
+        <label><input type="checkbox" name="impression" value="Irreversible pulpitis">Irreversible Pulpitis</label>
+        <label><input type="checkbox" name="impression" value="Acute apical periodontitis">Akute apikale Parodontitis</label>
+        <label><input type="checkbox" name="impression" value="Necrotic pulp">Nekrotische Pulpa</label>
+        <label><input type="checkbox" name="impression" value="Periapical abscess">Periapikaler Abszess</label>
+      </div>
+    </div>
+
+    <button type="button" onclick="saveData()">Eintrag speichern</button>
+    <button type="button" onclick="downloadCSV()">CSV exportieren</button>
+  </form>
+
+  <script>
+  // Load previous records from localStorage at startup
+  let records = JSON.parse(localStorage.getItem("pulpitisRecords") || "[]");
+	  
+  function csvSafe(value) {
+  if (value === null || value === undefined) return '""';
+  // Escape double quotes by doubling them
+  return `"${String(value).replace(/"/g, '""')}"`;
+}
+
+  function saveData() {
+    // collect painType checkboxes
+    const painTypeChecks = document.querySelectorAll('input[name="painType"]:checked');
+    const painTypeValues = Array.from(painTypeChecks).map(cb => cb.value).join("; ");
+
+    const impressionChecks = document.querySelectorAll('input[name="impression"]:checked');
+    const impressionValues = Array.from(impressionChecks).map(cb => cb.value).join("; ");
+
+    const record = {
+      patientID: document.getElementById('patientID').value,
+      yearOfBirth: document.getElementById('yearOfBirth').value,
+      sex: document.querySelector('input[name="sex"]:checked')?.value || "",
+  	  smoking: document.querySelector('input[name="smoking"]:checked')?.value || "",
+      antibiotics: document.querySelector('input[name="antibiotics"]:checked')?.value || "",
+      painkillers: document.querySelector('input[name="painkillers"]:checked')?.value || "",
+	  painkillerType: document.querySelector('input[name="painkillerType"]')?.value || "",
+      painType: painTypeValues,
+      painDurationPain: document.querySelector('input[name="painDurationPain"]')?.value || "",
+      painIntensityVAS: document.getElementById('painIntensity').value,
+      coldReaction: document.querySelector('input[name="coldReaction"]:checked')?.value || "",
+      coldIntensity: document.getElementById('coldIntensity').value,
+      coldDuration: document.querySelector('input[name="coldDuration"]:checked')?.value || "",
+      percussionLateral: document.querySelector('input[name="percussionLateral"]:checked')?.value || "",
+      latPercIntensity: document.getElementById('latPercIntensity').value,
+      percussionVertical: document.querySelector('input[name="percussionVertical"]:checked')?.value || "",
+      vertPercIntensity: document.getElementById('vertPercIntensity').value,
+      palpation: document.querySelector('input[name="palpation"]:checked')?.value || "",
+      palpationIntensity: document.getElementById('palpationIntensity').value,
+      pulpExposure: document.querySelector('input[name="pulpExposure"]:checked')?.value || "",
+      impression: impressionValues,
+      timestamp: new Date().toISOString()
+    };
+
+    records.push(record);
+    localStorage.setItem("pulpitisRecords", JSON.stringify(records)); // persist to iPad storage
+
+    alert("Entry saved!");
+    document.getElementById('pulpForm').reset();
+    document.getElementById('painVal').textContent = 0;
+    document.getElementById('coldVal').textContent = 0;
+    document.getElementById('latPercVal').textContent = 0;
+    document.getElementById('vertPercVal').textContent = 0;
+    document.getElementById('palpVal').textContent = 0;
+  }
+
+  function downloadCSV() {
+    const records = JSON.parse(localStorage.getItem("pulpitisRecords") || "[]");
+
+    // Build CSV header
+    let csv = "PatientID,YearOfBirth,Sex,Smoking,Antibiotics,Painkillers,PainkillerType,PainType,PainDuration,PainVAS,ColdReaction,ColdVAS,ColdDuration,PercussionLateral,LatPercVAS,PercussionVertical,VertPercVAS,Palpation,PalpVAS,PulpExposure,Impression,Timestamp\r\n";
+  
+    // Add rows
+records.forEach(r => {
+  csv += [
+    r.patientID,
+    r.yearOfBirth,
+    r.sex,
+    r.smoking,
+    r.antibiotics,
+    r.painkillers,
+    r.painkillerType,
+    r.painType,
+    r.painDurationPain,
+    r.painIntensityVAS,
+    r.coldReaction,
+    r.coldIntensity,
+    r.coldDuration,
+    r.percussionLateral,
+    r.latPercIntensity,
+    r.percussionVertical,
+    r.vertPercIntensity,
+    r.palpation,
+    r.palpationIntensity,
+    r.pulpExposure,
+    r.impression,
+    r.timestamp
+  ].map(csvSafe).join(",") + "\r\n";
+});
+	  
+    // Add BOM to force Excel/Numbers to interpret UTF-8 correctly
+    const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
+    const blob = new Blob([bom, csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+
+    // Get current date and time for filename
+    const now = new Date();
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const dd = String(now.getDate()).padStart(2, '0');
+    const hh = String(now.getHours()).padStart(2, '0');
+    const min = String(now.getMinutes()).padStart(2, '0');
+    const ss = String(now.getSeconds()).padStart(2, '0');
+    const filename = `pulpitis_records_${yyyy}-${mm}-${dd}_${hh}-${min}-${ss}.csv`;
+
+    // Create hidden link and trigger download
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;  // filename with date & time
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    // Cleanup
+    URL.revokeObjectURL(url);
+}
+  </script>
+</body>
+</html>

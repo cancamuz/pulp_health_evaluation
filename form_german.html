@@ -221,12 +221,24 @@
       document.getElementById('palpVal').textContent = 0;
     }
 
+    function csvEscape(value) {
+      if (value == null) return "";
+      const v = String(value).replace(/"/g, '""');
+      return `"${v}"`;
+    }
+
     function downloadCSV() {
       let csv = "PatientID,Geburtsjahr,Geschlecht,Antibiotika,Schmerzmittel,Schmerztyp,VAS_Schmerz,Kältetest_Reaktion,VAS_Kälte,Schmerzdauer,Laterale_Perkussion,VAS_Lateral,Vertikale_Perkussion,VAS_Vertikal,Palpation,VAS_Palpation,Pulpaexposition,Befund\n";
       records.forEach(r => {
-        csv += `${r.patientID},${r.yearOfBirth},${r.sex},${r.antibiotics},${r.painkillers},${r.painType},${r.painIntensityVAS},${r.coldReaction},${r.coldIntensity},${r.coldDuration},${r.percussionLateral},${r.latPercIntensity},${r.percussionVertical},${r.vertPercIntensity},${r.palpation},${r.palpationIntensity},${r.pulpExposure},${r.impression}\n`;
+        csv += [
+          r.patientID, r.yearOfBirth, r.sex, r.antibiotics, r.painkillers,
+          r.painType, r.painIntensityVAS, r.coldReaction, r.coldIntensity,
+          r.coldDuration, r.percussionLateral, r.latPercIntensity,
+          r.percussionVertical, r.vertPercIntensity, r.palpation,
+          r.palpationIntensity, r.pulpExposure, r.impression
+        ].map(csvEscape).join(",") + "\n";
       });
-      const blob = new Blob([csv], { type: 'text/csv' });
+      const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.setAttribute('hidden', '');
@@ -237,5 +249,6 @@
       document.body.removeChild(a);
     }
   </script>
+
 </body>
 </html>

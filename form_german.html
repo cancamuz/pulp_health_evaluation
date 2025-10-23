@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pulpitis Data Collection Form</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; max-width: 800px; }
+    h2 { margin-top: 30px; }
+    label { display: block; margin-top: 10px; }
+    input[type="checkbox"], input[type="radio"] { margin-right: 5px; }
+    select, input[type="text"] { width: 100%; padding: 5px; margin-top: 5px; }
+    .section { border: 1px solid #ccc; border-radius: 8px; padding: 15px; margin-bottom: 20px; }
+    button { margin-top: 20px; padding: 10px 20px; }
+    .slider-container { display: flex; align-items: center; gap: 10px; }
+    .slider { flex: 1; -webkit-appearance: none; height: 15px; border-radius: 7px; background: linear-gradient(to right, green, yellow, red); outline: none; }
+    .slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #333; cursor: pointer; }
+    .slider::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: #333; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Pulpitis Classification Form</h1>
+
+  <form id="pulpForm">
+    <div class="section">
+      <h2>Patient Info</h2>
+      <label>Patient Study ID <input type="text" id="patientID" required></label>
+      <label>Year of Birth <input type="text" id="yearOfBirth" placeholder="e.g., 1985" required></label>
+
+      <label>Sex</label>
+      <label><input type="radio" name="sex" value="Male" required>Male</label>
+      <label><input type="radio" name="sex" value="Female">Female</label>
+
+      <label>Antibiotics taken in last 24h</label>
+      <label><input type="radio" name="antibiotics" value="No" required>No</label>
+      <label><input type="radio" name="antibiotics" value="Yes">Yes</label>
+
+      <label>Painkillers taken in last 24h</label>
+      <label><input type="radio" name="painkillers" value="No" required>No</label>
+      <label><input type="radio" name="painkillers" value="Yes">Yes</label>
+    </div>
+
+    <div class="section">
+      <h2>Pain Type (Patient Reported)</h2>
+      <label><input type="checkbox" name="painType" value="No pain">No pain</label>
+      <label><input type="checkbox" name="painType" value="Provoked only">Provoked only</label>
+      <label><input type="checkbox" name="painType" value="Spontaneous">Spontaneous</label>
+      <label><input type="checkbox" name="painType" value="Sharp">Sharp</label>
+      <label><input type="checkbox" name="painType" value="Dull">Dull</label>
+      <label><input type="checkbox" name="painType" value="Throbbing">Throbbing</label>
+      <label><input type="checkbox" name="painType" value="Radiating">Radiating</label>
+      <label><input type="checkbox" name="painType" value="Short duration">Short duration</label>
+      <label><input type="checkbox" name="painType" value="Prolonged duration">Prolonged duration</label>
+      <label><input type="checkbox" name="painType" value="Lingering">Lingering</label>
+      <label>Pain Intensity (0 = no pain, 10 = worst pain)
+        <div class="slider-container">
+          <input type="range" id="painIntensity" class="slider" min="0" max="10" step="1" value="0" oninput="document.getElementById('painVal').textContent=this.value">
+          <span id="painVal">0</span>
+        </div>
+      </label>
+    </div>
+
+    <div class="section">
+      <h2>Cold Test</h2>
+      <label>Reaction
+        <select id="coldReaction">
+          <option>No tenderness / no reaction</option>
+          <option>Tenderness present / positive reaction</option>
+        </select>
+      </label>
+      <label>Pain Intensity (0 = no pain, 10 = worst pain)
+        <div class="slider-container">
+          <input type="range" id="coldIntensity" class="slider" min="0" max="10" step="1" value="0" oninput="document.getElementById('coldVal').textContent=this.value">
+          <span id="coldVal">0</span>
+        </div>
+      </label>
+
+      <label>Pain Duration</label>
+      <select id="coldDuration">
+        <option>0 - 3 seconds</option>
+        <option>4 - 10 seconds</option>
+        <option>10 - 25 seconds</option>
+        <option>> 25 seconds</option>
+      </select>
+    </div>
+
+    <div class="section">
+      <h2>Percussion / Palpation</h2>
+      <label>Lateral Percussion
+        <select id="percussionLateral">
+          <option>No tenderness / no reaction</option>
+          <option>Tenderness present / positive reaction</option>
+        </select>
+      </label>
+      <label>Pain Intensity (0 = no pain, 10 = worst pain)
+        <div class="slider-container">
+          <input type="range" id="latPercIntensity" class="slider" min="0" max="10" step="1" value="0" oninput="document.getElementById('latPercVal').textContent=this.value">
+          <span id="latPercVal">0</span>
+        </div>
+      </label>
+
+      <label>Vertical Percussion
+        <select id="percussionVertical">
+          <option>No tenderness / no reaction</option>
+          <option>Tenderness present / positive reaction</option>
+        </select>
+      </label>
+      <label>Pain Intensity (0 = no pain, 10 = worst pain)
+        <div class="slider-container">
+          <input type="range" id="vertPercIntensity" class="slider" min="0" max="10" step="1" value="0" oninput="document.getElementById('vertPercVal').textContent=this.value">
+          <span id="vertPercVal">0</span>
+        </div>
+      </label>
+
+      <label>Palpation
+        <select id="palpation">
+          <option>No tenderness / no reaction</option>
+          <option>Tenderness present / positive reaction</option>
+        </select>
+      </label>
+      <label>Pain Intensity (0 = no pain, 10 = worst pain)
+        <div class="slider-container">
+          <input type="range" id="palpationIntensity" class="slider" min="0" max="10" step="1" value="0" oninput="document.getElementById('palpVal').textContent=this.value">
+          <span id="palpVal">0</span>
+        </div>
+      </label>
+    </div>
+
+    <div class="section">
+      <h2>Pulp Exposure</h2>
+      <label>Is the pulp exposed?
+        <select id="pulpExposure">
+          <option>No</option>
+          <option>Yes</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="section">
+      <h2>Initial Clinical Assessment</h2>
+      <select id="impression">
+        <option>Normal pulp</option>
+        <option>Reversible pulpitis</option>
+        <option>Irreversible pulpitis</option>
+        <option>Necrotic pulp</option>
+      </select>
+    </div>
+
+    <button type="button" onclick="saveData()">Save Entry</button>
+    <button type="button" onclick="downloadCSV()">Export CSV</button>
+  </form>
+
+  <script>
+    let records = [];
+
+    function saveData() {
+      const painTypes = Array.from(document.querySelectorAll('input[name="painType"]:checked')).map(cb => cb.value).join(";");
+      const record = {
+        patientID: document.getElementById('patientID').value,
+        yearOfBirth: document.getElementById('yearOfBirth').value,
+        sex: document.querySelector('input[name="sex"]:checked')?.value || "",
+        antibiotics: document.querySelector('input[name="antibiotics"]:checked')?.value || "",
+        painkillers: document.querySelector('input[name="painkillers"]:checked')?.value || "",
+        painTypes: painTypes,
+        painIntensityVAS: document.getElementById('painIntensity').value,
+        coldReaction: document.getElementById('coldReaction').value,
+        coldIntensity: document.getElementById('coldIntensity').value,
+        coldDuration: document.getElementById('coldDuration').value,
+        percussionLateral: document.getElementById('percussionLateral').value,
+        latPercIntensity: document.getElementById('latPercIntensity').value,
+        percussionVertical: document.getElementById('percussionVertical').value,
+        vertPercIntensity: document.getElementById('vertPercIntensity').value,
+        palpation: document.getElementById('palpation').value,
+        palpationIntensity: document.getElementById('palpationIntensity').value,
+        pulpExposure: document.getElementById('pulpExposure').value,
+        impression: document.getElementById('impression').value
+      };
+      records.push(record);
+      alert("Entry saved!");
+      document.getElementById('pulpForm').reset();
+      document.getElementById('painVal').textContent = 0;
+      document.getElementById('coldVal').textContent = 0;
+      document.getElementById('latPercVal').textContent = 0;
+      document.getElementById('vertPercVal').textContent = 0;
+      document.getElementById('palpVal').textContent = 0;
+    }
+
+    function downloadCSV() {
+      let csv = "PatientID,YearOfBirth,Sex,Antibiotics,Painkillers,PainTypes,PainVAS,ColdReaction,ColdVAS,ColdDuration,PercussionLateral,LatPercVAS,PercussionVertical,VertPercVAS,Palpation,PalpVAS,PulpExposure,Impression\n";
+      records.forEach(r => {
+        csv += `${r.patientID},${r.yearOfBirth},${r.sex},${r.antibiotics},${r.painkillers},${r.painTypes},${r.painIntensityVAS},${r.coldReaction},${r.coldIntensity},${r.coldDuration},${r.percussionLateral},${r.latPercIntensity},${r.percussionVertical},${r.vertPercIntensity},${r.palpation},${r.palpationIntensity},${r.pulpExposure},${r.impression}\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.setAttribute('hidden', '');
+      a.setAttribute('href', url);
+      a.setAttribute('download', 'pulpitis_data.csv');
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  </script>
+</body>
+</html>

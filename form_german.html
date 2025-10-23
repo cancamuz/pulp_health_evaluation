@@ -237,28 +237,33 @@
       return `"${v}"`;
     }
 
-    function downloadCSV() {
-      let csv = "PatientID,Geburtsjahr,Geschlecht,Rauchen,Antibiotika,Schmerzmittel,Schmerzmittel_Typ,Schmerztyp,VAS_Schmerz,Kältetest_Reaktion,VAS_Kälte,Schmerzdauer,Laterale_Perkussion,VAS_Lateral,Vertikale_Perkussion,VAS_Vertikal,Palpation,VAS_Palpation,Pulpaexposition,Quadrant,Schmerzgeschichte,Befund\n";
-      records.forEach(r => {
-        csv += [
-          r.patientID, r.yearOfBirth, r.sex, r.smoking, r.antibiotics,
-          r.painkillers, r.painkillerType, r.painType, r.painIntensityVAS,
-          r.coldReaction, r.coldIntensity, r.coldDuration,
-          r.percussionLateral, r.latPercIntensity, r.percussionVertical,
-          r.vertPercIntensity, r.palpation, r.palpationIntensity,
-          r.pulpExposure, r.quadrant, r.geschichte, r.impression
-        ].map(csvEscape).join(",") + "\n";
-      });
-      const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.setAttribute('hidden', '');
-      a.setAttribute('href', url);
-      a.setAttribute('download', 'pulpabefund.csv');
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
+function downloadCSV() {
+  let csv = "PatientID,Geburtsjahr,Geschlecht,Rauchen,Antibiotika,Schmerzmittel,Schmerzmittel_Typ,Schmerztyp,VAS_Schmerz,Kältetest_Reaktion,VAS_Kälte,Schmerzdauer,Laterale_Perkussion,VAS_Lateral,Vertikale_Perkussion,VAS_Vertikal,Palpation,VAS_Palpation,Pulpaexposition,Quadrant,Schmerzgeschichte,Befund\n";
+  records.forEach(r => {
+    csv += [
+      r.patientID, r.yearOfBirth, r.sex, r.smoking, r.antibiotics, r.painkillers, r.painkillerType,
+      r.painType, r.painIntensityVAS, r.coldReaction, r.coldIntensity, r.coldDuration,
+      r.percussionLateral, r.latPercIntensity, r.percussionVertical, r.vertPercIntensity,
+      r.palpation, r.palpationIntensity, r.pulpExposure, r.quadrant, r.geschichte, r.impression
+    ].map(csvEscape).join(",") + "\n";
+  });
+
+  const now = new Date();
+  const dateStr = `${String(now.getDate()).padStart(2, '0')}.${String(now.getMonth() + 1).padStart(2, '0')}.${now.getFullYear()}_${String(now.getHours()).padStart(2, '0')}.${String(now.getMinutes()).padStart(2, '0')}.${String(now.getSeconds()).padStart(2, '0')}`;
+  const filename = `pulp_data_${dateStr}.csv`;
+
+  const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.setAttribute('hidden', '');
+  a.setAttribute('href', url);
+  a.setAttribute('download', filename);
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
   </script>
+
+
 </body>
 </html>

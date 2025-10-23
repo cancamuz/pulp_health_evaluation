@@ -65,7 +65,7 @@
       <h2>Schmerztyp (Patientenangabe - alles Zutreffende ankreuzen)</h2>
       <div class="pain-type-group">
         <label><input type="checkbox" name="painType" value="Kein Schmerz">Kein Schmerz</label>
-        <label><input type="checkbox" name="painType" value="Provoziert (durch Reiz, Hitze, Süßes...)">Provoziert</label>
+        <label><input type="checkbox" name="painType" value="Provoziert">Provoziert (durch Reiz, Hitze, Süßes...)</label>
         <label><input type="checkbox" name="painType" value="Spontan">Spontan</label>
         <label><input type="checkbox" name="painType" value="Stechend">Stechend</label>
         <label><input type="checkbox" name="painType" value="Dumpf">Dumpf</label>
@@ -191,12 +191,20 @@
       const painTypeChecks = document.querySelectorAll('input[name="painType"]:checked');
       const painTypeValues = Array.from(painTypeChecks).map(cb => cb.value).join("; ");
 
+      const quadrantChecks = document.querySelectorAll('input[name="quadrant"]:checked');
+      const quadrantValues = Array.from(quadrantChecks).map(cb => cb.value).join("; ");
+
+      const impressionChecks = document.querySelectorAll('input[name="impression"]:checked');
+      const impressionValues = Array.from(impressionChecks).map(cb => cb.value).join("; ");
+
       const record = {
         patientID: document.getElementById('patientID').value,
         yearOfBirth: document.getElementById('yearOfBirth').value,
         sex: document.querySelector('input[name="sex"]:checked')?.value || "",
+        smoking: document.querySelector('input[name="smoking"]:checked')?.value || "",
         antibiotics: document.querySelector('input[name="antibiotics"]:checked')?.value || "",
         painkillers: document.querySelector('input[name="painkillers"]:checked')?.value || "",
+        painkillerType: document.querySelector('input[name="painkillerType"]')?.value || "",
         painType: painTypeValues,
         painIntensityVAS: document.getElementById('painIntensity').value,
         coldReaction: document.querySelector('input[name="coldReaction"]:checked')?.value || "",
@@ -209,7 +217,9 @@
         palpation: document.querySelector('input[name="palpation"]:checked')?.value || "",
         palpationIntensity: document.getElementById('palpationIntensity').value,
         pulpExposure: document.querySelector('input[name="pulpExposure"]:checked')?.value || "",
-        impression: document.querySelector('input[name="impression"]:checked')?.value || ""
+        quadrant: quadrantValues,
+        geschichte: document.querySelector('input[name="geschichte"]:checked')?.value || "",
+        impression: impressionValues
       };
       records.push(record);
       alert("Eintrag gespeichert!");
@@ -228,14 +238,15 @@
     }
 
     function downloadCSV() {
-      let csv = "PatientID,Geburtsjahr,Geschlecht,Antibiotika,Schmerzmittel,Schmerztyp,VAS_Schmerz,Kältetest_Reaktion,VAS_Kälte,Schmerzdauer,Laterale_Perkussion,VAS_Lateral,Vertikale_Perkussion,VAS_Vertikal,Palpation,VAS_Palpation,Pulpaexposition,Befund\n";
+      let csv = "PatientID,Geburtsjahr,Geschlecht,Rauchen,Antibiotika,Schmerzmittel,Schmerzmittel_Typ,Schmerztyp,VAS_Schmerz,Kältetest_Reaktion,VAS_Kälte,Schmerzdauer,Laterale_Perkussion,VAS_Lateral,Vertikale_Perkussion,VAS_Vertikal,Palpation,VAS_Palpation,Pulpaexposition,Quadrant,Schmerzgeschichte,Befund\n";
       records.forEach(r => {
         csv += [
-          r.patientID, r.yearOfBirth, r.sex, r.antibiotics, r.painkillers,
-          r.painType, r.painIntensityVAS, r.coldReaction, r.coldIntensity,
-          r.coldDuration, r.percussionLateral, r.latPercIntensity,
-          r.percussionVertical, r.vertPercIntensity, r.palpation,
-          r.palpationIntensity, r.pulpExposure, r.impression
+          r.patientID, r.yearOfBirth, r.sex, r.smoking, r.antibiotics,
+          r.painkillers, r.painkillerType, r.painType, r.painIntensityVAS,
+          r.coldReaction, r.coldIntensity, r.coldDuration,
+          r.percussionLateral, r.latPercIntensity, r.percussionVertical,
+          r.vertPercIntensity, r.palpation, r.palpationIntensity,
+          r.pulpExposure, r.quadrant, r.geschichte, r.impression
         ].map(csvEscape).join(",") + "\n";
       });
       const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
@@ -249,6 +260,5 @@
       document.body.removeChild(a);
     }
   </script>
-
 </body>
 </html>
